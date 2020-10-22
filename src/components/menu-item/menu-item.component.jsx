@@ -4,6 +4,7 @@ import {withRouter} from 'react-router-dom'
 
 
 const MenuItem = ({ title, imageUrl, size, history, linkUrl, match }) => (
+  
   <div
     onClick={() => history.push(`${match.url}${linkUrl}`)}
     className={`${size} menu-item`}
