@@ -1,8 +1,8 @@
 import firebase from 'firebase/app'
-import 'firebase/firestore'
-import 'firebase/auth'
+import 'firebase/firestore' /* for database */
+import 'firebase/auth' /* for auth */
 
-const config = {
+const config = { /* yarn add firebase */
   apiKey: "AIzaSyAGqYXgXXMW4DWXIOD9j2dijp2BeGDruAA",
   authDomain: "crwn-db-7a69e.firebaseapp.com",
   databaseURL: "https://crwn-db-7a69e.firebaseio.com",
@@ -12,6 +12,18 @@ const config = {
   appId: "1:368328331148:web:91b2769987665f05fc10a9",
   measurementId: "G-RS285L3175",
 };
+
+firebase.initializeApp(config)
+
+export const auth = firebase.auth() /* for google authentication */
+export const firestore = firebase.firestore()
+
+const provider = new firebase.auth.GoogleAuthProvider()
+provider.setCustomParameters({promt: 'select_account'}) /*promt: 'select_account' degen----> trigger poppup google whenever we use this googleAuthprovider for authentication and sign in*/
+
+export const signInWithGoogle =()=> auth.signInWithPopup(provider)
+
+export default firebase
 
 export const createUserProfileDocument = async (userAuth,additionalData) =>{
    if(!userAuth) return
@@ -41,13 +53,13 @@ export const createUserProfileDocument = async (userAuth,additionalData) =>{
     
 }
 
-firebase.initializeApp(config);
+// firebase.initializeApp(config);
 
-export const auth = firebase.auth()
-export const firestore = firebase.firestore();
+// export const auth = firebase.auth()
+// export const firestore = firebase.firestore();
 
-const provider = new firebase.auth.GoogleAuthProvider()
-provider.setCustomParameters({promt: 'select_account'})
-export const signInWithGoogle = () => auth.signInWithPopup(provider)
+// const provider = new firebase.auth.GoogleAuthProvider()
+// provider.setCustomParameters({promt: 'select_account'})
+// export const signInWithGoogle = () => auth.signInWithPopup(provider)
 
-export default firebase
+// export default firebase

@@ -3,8 +3,8 @@ import './menu-item.styles.scss'
 import {withRouter} from 'react-router-dom'
 
 
-const MenuItem = ({ title, imageUrl, size, history, linkUrl, match }) => (
-  
+const MenuItem = ({ title, imageUrl, size, history, linkUrl, match }) => {
+  return (
   <div
     onClick={() => history.push(`${match.url}${linkUrl}`)}
     className={`${size} menu-item`}
@@ -22,5 +22,6 @@ const MenuItem = ({ title, imageUrl, size, history, linkUrl, match }) => (
     </div>
   </div>
 );
-
+}
+/* withRouter degen propsta history paida bolady,bizge history.push('/') kerek  withRouter will pass updated match , location , and history props to the wrapped component whenever it renders*/
 export default withRouter(MenuItem)

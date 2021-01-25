@@ -11,39 +11,46 @@ import {setCurrentUser} from './redux/user/user.actions'
 
 class App extends Component {
 
+  state={currentUser: null}
 
+/* we wanna store the state of our user in our APP,when user loggs in we wanna store it in APP and pass it to Component */
   unsubscribeFromAuth = null
   
-  componentDidMount(){
-    const {setCurrentUser} = this.props
+  componentDidMount(){ /* kogda login logout budet my hotim znat */
+    this.unsubscribeFromAuth=auth.onAuthStateChanged(user=> { /* user degen object ishinde user.email bar emaio.displayName bar */
+      console.log(user)
+        this.setState({currentUser: user})
+      })
 
-    this.unsubscribeFromAuth=  auth.onAuthStateChanged(async userAuth => {
-      //  this.setState({ currentUser:user });
-       if(userAuth){
-          const userRef = await createUserProfileDocument(userAuth)
+    // const {setCurrentUser} = this.props
+
+    // this.unsubscribeFromAuth=  auth.onAuthStateChanged(async userAuth => {
+    //   //  this.setState({ currentUser:user });
+    //    if(userAuth){
+    //       const userRef = await createUserProfileDocument(userAuth)
  
-          userRef.onSnapshot(snapshot => {
-             setCurrentUser ({
-                 id: snapshot.id,
-                 ...snapshot.data()
-               })
-             })
+    //       userRef.onSnapshot(snapshot => {
+    //          setCurrentUser ({
+    //              id: snapshot.id,
+    //              ...snapshot.data()
+    //            })
+    //          })
           
-       }else{
-         setCurrentUser(userAuth)
-       }
+    //    }else{
+    //      setCurrentUser(userAuth)
+    //    }
        
-     })
+    //  })
   }
 
   componentWillUnmount(){
-    this.unsubscribeFromAut()
+    this.unsubscribeFromAut() /* close the subscription */
   }
 
   render(){
     return (
       <div>
-        <Header  />
+        <Header  currentUser={this.state.currentUser}/>
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shop" component={ShopPage} />

@@ -7,14 +7,13 @@ import {connect} from 'react-redux'
 
 
 const Header = ({currentUser}) => {
-  
   return (
  <div className='header'>
 
   <Link className='logo-container' to='/'>
      <Logo className='logo'/>
   </Link>
-
+{/*auth.signOut() degen funct provided by firebase  */}
   <div className='options'>
     <Link className='option' to='/shop'>SHOP</Link>
     <Link className='option' to='/shop'>CONTACT</Link>
@@ -33,4 +32,4 @@ const mapStateToProps = state => ({
   currentUser: state.user.currentUser
 })
 
-export default  connect(mapStateToProps)(Header)
+export default  connect()(Header)
