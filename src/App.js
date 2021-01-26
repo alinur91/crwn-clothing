@@ -15,7 +15,7 @@ class App extends Component {
 
 /* we wanna store the state of our user in our APP,when user loggs in we wanna store it in APP and pass it to Component */
   unsubscribeFromAuth = null
-  /* auth=  firebase.auth() */
+  /* auth=  firebase.auth() */ /* componentDidMount dlya 4ego shtoby uznat currentUser esli null to v Headere signIn bolady esli currentUser bar to sign out */
   componentDidMount(){ /* kogda login logout budet my hotim znat */
     /* auth.signOut() bolganda onAuthStateChanged boladi */
     this.unsubscribeFromAuth=auth.onAuthStateChanged(async userAuth=> { /* user degen object ishinde user.email bar emaio.displayName bar */
@@ -29,8 +29,7 @@ email: "areshil91@gmail.com"
 __proto__: Object */
             this.setState({
               currentUser: {id: snapshot.id,...snapshot.data()}}
-            )
-            console.log(this.state)
+            ) /* kogda regimsya to state set bolady */
         })
         
       } /* userAuth is null,if user signes out we still want to set currentUser to null */
@@ -42,25 +41,6 @@ __proto__: Object */
         
       })
 
-    // const {setCurrentUser} = this.props
-
-    // this.unsubscribeFromAuth=  auth.onAuthStateChanged(async userAuth => {
-    //   //  this.setState({ currentUser:user });
-    //    if(userAuth){
-    //       const userRef = await createUserProfileDocument(userAuth)
- 
-    //       userRef.onSnapshot(snapshot => {
-    //          setCurrentUser ({
-    //              id: snapshot.id,
-    //              ...snapshot.data()
-    //            })
-    //          })
-          
-    //    }else{
-    //      setCurrentUser(userAuth)
-    //    }
-       
-    //  })
   }
 
   componentWillUnmount(){
