@@ -6,7 +6,6 @@ export default  ({ handleChange, label, ...otherProps }) => (
   <div className="group">
     <input
       onChange={handleChange}
-      
       className="form-input"
       {...otherProps}
     />

@@ -15,6 +15,14 @@ const config = { /* yarn add firebase */
 
 firebase.initializeApp(config)
 
+// const firestore = firebase.firestore()
+
+// firestore.collection('users').doc('rz0l2n6tskVAXmPlhYfd').collection('items').doc('XdfG4Y5ubxsA4DaL09V5')
+
+// firestore.doc('/users/rz0l2n6tskVAXmPlhYfd/items/XdfG4Y5ubxsA4DaL09V5')
+
+// firestore.collection('/users/rz0l2n6tskVAXmPlhYfd/items/')
+
 export const auth = firebase.auth() /* for google authentication */
 export const firestore = firebase.firestore()
 
@@ -23,43 +31,32 @@ provider.setCustomParameters({promt: 'select_account'}) /*promt: 'select_account
 
 export const signInWithGoogle =()=> auth.signInWithPopup(provider)
 
+
+/* we want to uid in the db, uid nahoditsya v this.unsubscribeFromAuth=auth.onAuthStateChanged(user=> {} */
+
+  export const createUserProfileDocument = async(userAuth,additionalData)=>{
+      /* userAuth degen object user user.uid user.email */
+      if(!userAuth) {return} /* esli user uzhe est v bd,eshtene istemeiymiz,we want to exist from this funct */
+      /* we're going to query inside a firestore for the document to see if it already exist*/
+      const userRef = firestore.doc(`users/${userAuth.uid}`)
+      /* doc degen object */
+/* we stored this user obj or not that we've authenticated */
+      const snapshot =await userRef.get() /* using snapshot we're going to figure out whether or not there's data there, snapshot.id, snapshot.exist */
+      if(!snapshot.exists){ /* esli usera net v db we want to create const users=['123123123': {items: ['123321': {}]}] */
+          const {displayName,email} = userAuth /* what data we want to store? */
+            const createdAt = new Date()
+        /* snapshot bolmasa my prosto create delaem object {} s etim userom */
+            try { /* try catch potomy shto we're going to do async request to our db to store this data now. users/userAuth.uid/ suda {} object  */
+                await userRef.set({ /* create usera */
+                  displayName,email,createdAt,...additionalData
+                })
+              
+            } catch (error) {
+              console.log('error creating user', error.message)
+            }
+      }
+
+      return userRef
+  }
+
 export default firebase
-
-export const createUserProfileDocument = async (userAuth,additionalData) =>{
-   if(!userAuth) return
-
-   const userRef = firestore.doc(`users/${userAuth.uid}`)
-
-   const snapShot = await userRef.get()
-
-   if(!snapShot.exists) {
-     const {displayName,email} = userAuth
-     const createdAt= new Date()
-
-     try{
-        await userRef.set({
-          displayName,
-          email,
-          createdAt,
-          ...additionalData
-        })
-     }
-     catch(error){
-        console.log('error creating user', error.message)
-     }
-   }
-
-   return userRef
-    
-}
-
-// firebase.initializeApp(config);
-
-// export const auth = firebase.auth()
-// export const firestore = firebase.firestore();
-
-// const provider = new firebase.auth.GoogleAuthProvider()
-// provider.setCustomParameters({promt: 'select_account'})
-// export const signInWithGoogle = () => auth.signInWithPopup(provider)
-
-// export default firebase
