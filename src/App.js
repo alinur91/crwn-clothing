@@ -7,16 +7,16 @@ import ShopPage from './pages/shop/shop.component'
 import Header from './components/header/header.component'
 import SignInAndSignUpPage from "./pages/sign-in-and-signup/sign-in-and-signup";
 import {auth,createUserProfileDocument} from './firebase/firebase.utils'
-import {setCurrentUser} from './redux/user/user.actions'
+import {setCurrentUser} from './redux/user/user.action'
 
 class App extends Component {
 
-  state={currentUser: null}
 
 /* we wanna store the state of our user in our APP,when user loggs in we wanna store it in APP and pass it to Component */
   unsubscribeFromAuth = null
   /* auth=  firebase.auth() */ /* componentDidMount dlya 4ego shtoby uznat currentUser esli null to v Headere signIn bolady esli currentUser bar to sign out */
   componentDidMount(){ /* kogda login logout budet my hotim znat */
+    const {setCurrentUser} = this.props
     /* auth.signOut() bolganda onAuthStateChanged boladi */
     this.unsubscribeFromAuth=auth.onAuthStateChanged(async userAuth=> { /* user degen object ishinde user.email bar emaio.displayName bar */
       if(userAuth){ /*userAuth degen zaloginen kogda signed in,kogda zaloginen my hotim v db zapisat(esli on predydushi ne zapisan) i setState sdelat */
@@ -27,14 +27,12 @@ class App extends Component {
 displayName: "R-Line"
 email: "areshil91@gmail.com"
 __proto__: Object */
-            this.setState({
-              currentUser: {id: snapshot.id,...snapshot.data()}}
-            ) /* kogda regimsya to state set bolady */
+        setCurrentUser({id: snapshot.id,...snapshot.data()}) /* kogda regimsya to state set bolady */
         })
         
       } /* userAuth is null,if user signes out we still want to set currentUser to null */
       else{ /* esli user loggs out currentUser: null isteimyz */
-        this.setState(()=>({currentUser: userAuth}))
+        setCurrentUser(userAuth)
       }
       /* v bd zasosivaem user [21321: {displayName,email,createdAt}] */
        /* currentUser kerek shtoby button sign in ili sign out boldy, v header peredaem  */
@@ -50,7 +48,7 @@ __proto__: Object */
   render(){
     return (
       <div>
-        <Header  currentUser={this.state.currentUser}/>
+        <Header />
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shop" component={ShopPage} />

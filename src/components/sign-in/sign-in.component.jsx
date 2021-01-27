@@ -17,7 +17,7 @@ class SignIn extends Component {
   const {email,password} = this.state
   try{
     await auth.signInWithEmailAndPassword(email,password)
-    this.setState({ email: "", password:''});
+    this.setState({ email: "", password:''}); /* setState rerenders app,onAuthStateChange */
   }catch(error){
     console.log(error)
   }
