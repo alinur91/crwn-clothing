@@ -51,7 +51,7 @@ __proto__: Object */
         <Header />
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route path="/shop" component={ShopPage} /> {/* render degen what component to return */}
+          <Route path="/shop" component={ShopPage} /> {/* render degen what component to return, esli zaloginelsya nuzhno redirect '/' esli net to componenty SignInAndSignUpPage */}
           <Route exact path="/signin" render={()=> this.props.currentUser?(<Redirect to="/"/>): (<SignInAndSignUpPage/>)} />
         </Switch>
       </div>
