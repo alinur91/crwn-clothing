@@ -11,7 +11,7 @@ export default ()=>{
  const store = createStore(combineReducers({
   user: userReducer,
   cart: cartReducer
-  /* userReducer degen {id:12312,email: 123@gmail.com,displayName: 'asd',createdAt:123} */
+  /* userReducer degen {currentUser: {id:12312,email: 123@gmail.com,displayName: 'asd',createdAt:123} } */
  }),
  applyMiddleware(...middlewares)
  )
