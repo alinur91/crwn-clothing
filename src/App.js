@@ -8,6 +8,11 @@ import Header from './components/header/header.component'
 import SignInAndSignUpPage from "./pages/sign-in-and-signup/sign-in-and-signup";
 import {auth,createUserProfileDocument} from './firebase/firebase.utils'
 import {setCurrentUser} from './redux/user/user.action'
+import {selectCurrentUser} from './redux/user/user.selectors'
+
+import CheckoutPage from './pages/checkout/checkout.component'
+
+import {createStructuredSelector} from 'reselect'
 
 class App extends Component {
 
@@ -47,10 +52,11 @@ __proto__: Object */
 
   render(){
     return (
-      <div>
+      <div> {/* kogda exact? kogda  naprimer posle /checkout nety /checkout/blbal. A Naprimer /shop  path='/shop' ne NUZHEN exact oitkeni /shop/jackets bolady*/}
         <Header />
         <Switch>
           <Route exact path="/" component={HomePage} />
+          <Route exact path="/checkout" component={CheckoutPage} />
           <Route path="/shop" component={ShopPage} /> {/* render degen what component to return, esli zaloginelsya nuzhno redirect '/' esli net to componenty SignInAndSignUpPage */}
           <Route exact path="/signin" render={()=> this.props.currentUser?(<Redirect to="/"/>): (<SignInAndSignUpPage/>)} />
         </Switch>
@@ -58,8 +64,8 @@ __proto__: Object */
     );
   } 
 }
-/* user degen {currentUser:{id,createdat,email,displName}} */
-const mapsStateToProps = ({user})=>({currentUser: user.currentUser})
+/* user degen {currentUser:{id,createdat,email,displName}} selectCurrentUser() automatom peredast state */
+const mapsStateToProps = createStructuredSelector({currentUser: selectCurrentUser})
 
 const mapDispatchToProps = dispatch => ({
 setCurrentUser : user => dispatch(setCurrentUser(user))
