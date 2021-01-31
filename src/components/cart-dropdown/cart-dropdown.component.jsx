@@ -24,7 +24,7 @@ const CartDropdown =({cartItems,history,dispatch})=>{
    </div>
    <CustomButton onClick={()=>{
      history.push('/checkout')
-     dispatch(toggleCartHidden())
+     dispatch(toggleCartHidden()) /* connect passes dispatch into our components as a prop if we do not supply a 2nd argument to connect */
      }}>GO TO CHECKOUT</CustomButton>
  </div>
 )
@@ -33,7 +33,7 @@ const CartDropdown =({cartItems,history,dispatch})=>{
 const mapStateToProps = createStructuredSelector({cartItems: selectCartItems}) /* this make sure cart-dropdown.component is not getting re-rendrered whenever the state changes that unreletaed to the cart items*/
 /* withRouter v propsax history.push('/checkout') bar */
 // const mapDispatchToProps = dispatch=> dispatch(toggleCartHidden())
-
+/* connect passes dispatch into our components as a prop if we do not supply a 2nd argument to connect */
 export default withRouter(connect(mapStateToProps)(CartDropdown))
 
 /* withRouter is just taking the component that got returned from our connect call as its component argument */
