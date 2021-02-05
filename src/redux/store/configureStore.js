@@ -3,24 +3,21 @@ import logger from 'redux-logger' /* whenever action gets fired or dispatched we
 
 import rootReducer from './root-reducer'
 
-
-
 import {persistStore} from 'redux-persist' /* yarn add redux-persist */
 /* persistStore allows us our browser to cache our store now depending on certain configuration options that we're going to set*/
 
 /* yarn add redux redux-logger react-redux */
 
 
-
-
 const composeEnhancers =window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
-const middlewares = [logger] /* logger console-ga shigaradi kazhdiy raz action dispatches current state -ti */
-
-
+const middlewares = [] /* logger console-ga shigaradi kazhdiy raz action dispatches current state -ti */
 
 /* yarn add redux redux-logger react-redux */
 
+if(process.env.NODE_ENV ==='development'){
+ middlewares.push(logger)
+}
 
  export const store = createStore(rootReducer,
  composeEnhancers(applyMiddleware(...middlewares))
