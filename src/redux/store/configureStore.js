@@ -16,7 +16,7 @@ const middlewares = [] /* logger console-ga shigaradi kazhdiy raz action dispatc
 /* yarn add redux redux-logger react-redux */
 
 if(process.env.NODE_ENV ==='development'){
- middlewares.push(logger)
+ middlewares.push(logger) /* esli na heroku smotrim to v console ne nuzhen logger */
 }
 
  export const store = createStore(rootReducer,
@@ -24,7 +24,7 @@ if(process.env.NODE_ENV ==='development'){
  )
 /* applyMiddleware(logger) */
 
- export const persistor = persistStore(store)
+export const persistor = persistStore(store)
 export default {store,persistor}
 
 

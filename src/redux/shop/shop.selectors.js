@@ -10,11 +10,11 @@ export const selectCollections = createSelector(
 
 export const selectCollectionsForPreview = createSelector(
  [selectCollections],
- collections=> Object.values(collections)
-)
+ collections=> collections?Object.values(collections):[] /* back to array. collections render methodte basynda null bolady,componentDidMountta toka v reducere poyavitsya */
+) 
 
 /* collectionUrlParam degen match.params.collectionId hats or sneakers */
 export const selectCollection = collectionUrlParam => createSelector(
  [selectCollections],
- collections=> collections[collectionUrlParam]
+ collections=> collections? collections[collectionUrlParam]: null
 )

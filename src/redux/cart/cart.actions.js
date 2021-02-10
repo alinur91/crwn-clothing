@@ -19,3 +19,9 @@ export const clearItemFromCart = item => ({
  type: CartActionTypes.CLEAR_ITEM_FROM_CART,
  payload: item
 })
+
+/* query reference object(bd zapros istegende info kaityp keledi. firestore.doc('/users/:userId'),firestore.collections('/users/'))
+2 types of reference objects we can get back, document ref obj and collect ref obj
+
+
+and the snapshot objects--> documentRef.get() */
