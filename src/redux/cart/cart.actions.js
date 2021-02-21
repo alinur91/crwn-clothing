@@ -25,3 +25,7 @@ export const clearItemFromCart = item => ({
 
 
 and the snapshot objects--> documentRef.get() */
+
+export const clearCart = ()=>({ /* we need to make sure we dispatch  clearCart from our saga,when we hear user sign_out_success*/
+  type: CartActionTypes.CLEAR_CART
+})

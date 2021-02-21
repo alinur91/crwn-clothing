@@ -10,7 +10,9 @@ import {createStructuredSelector} from 'reselect'
 import {selectCurrentUser} from '../../redux/user/user.selectors'
 import {HeaderContainer,LogoContainer,OptionsContainer,OptionLink} from './header.styles'
 
-const Header = ({currentUser,hidden}) => {
+import {signOutStart} from '../../redux/user/user.action'
+
+const Header = ({currentUser,hidden,signOutStart}) => {
   return (
  <HeaderContainer>
 
@@ -22,7 +24,7 @@ const Header = ({currentUser,hidden}) => {
     <OptionLink to='/shop'>SHOP</OptionLink>
     <OptionLink to='/shop'>CONTACT</OptionLink>
     {currentUser?
-    <OptionLink as='div' onClick={()=> auth.signOut()}>SIGN OUT</OptionLink>
+    <OptionLink as='div' onClick={signOutStart}>SIGN OUT</OptionLink>
     :
     <OptionLink to='/signin'>SIGN IN</OptionLink>
     }
@@ -40,4 +42,4 @@ const mapStateToProps= createStructuredSelector({
    /* {currentUser: {id:123,email: 123,displayNmae: 133,createdAt: 123}} */
 })
 
-export default  connect(mapStateToProps)(Header)
+export default  connect(mapStateToProps,{signOutStart})(Header)

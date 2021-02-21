@@ -24,9 +24,6 @@ firebase.initializeApp(config)
 // firestore.collection('/users/rz0l2n6tskVAXmPlhYfd/items/')
 
 
-const provider = new firebase.auth.GoogleAuthProvider()
-provider.setCustomParameters({promt: 'select_account'}) /*promt: 'select_account' degen----> trigger poppup google whenever we use this googleAuthprovider for authentication and sign in*/
-
 
 
 /* we want to uid in the db, uid nahoditsya v this.unsubscribeFromAuth=auth.onAuthStateChanged(user=> {} */
@@ -94,11 +91,21 @@ provider.setCustomParameters({promt: 'select_account'}) /*promt: 'select_account
     }, {} /* what we wanna reduce down to is that final object, empty object as initial accumulator*/)
   }
 
-  
+  export const getCurrentUser = ()=>{
+    return new Promise((resolve,reject)=>{
+      const unsubscribe = auth.onAuthStateChanged(userAuth=>{
+        unsubscribe()
+        resolve(userAuth)
+      },reject)
+    })
+  }
+
+  export const googleProvider = new firebase.auth.GoogleAuthProvider()
+googleProvider.setCustomParameters({promt: 'select_account'}) /*promt: 'select_account' degen----> trigger poppup google whenever we use this googleAuthprovider for authentication and sign in*/
 
   export const auth = firebase.auth() /* for google authentication */
 export const firestore = firebase.firestore()
-export const signInWithGoogle =()=> auth.signInWithPopup(provider)
+export const signInWithGoogle =()=> auth.signInWithPopup(googleProvider)
 
 
 export default firebase

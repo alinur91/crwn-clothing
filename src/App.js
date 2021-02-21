@@ -7,11 +7,10 @@ import ShopPage from './pages/shop/shop.component'
 import Header from './components/header/header.component'
 import SignInAndSignUpPage from "./pages/sign-in-and-signup/sign-in-and-signup";
 import {auth,createUserProfileDocument} from './firebase/firebase.utils'
-import {setCurrentUser} from './redux/user/user.action'
 import {selectCurrentUser} from './redux/user/user.selectors'
 
 import CheckoutPage from './pages/checkout/checkout.component'
-
+import {checkUserSession} from './redux/user/user.action'
 
 import {createStructuredSelector} from 'reselect'
 
@@ -22,29 +21,31 @@ class App extends Component {
   unsubscribeFromAuth = null
   /* auth=  firebase.auth() */ /* componentDidMount dlya 4ego shtoby uznat currentUser esli null to v Headere signIn bolady esli currentUser bar to sign out */
   /* componentDidMount runs everytime we refresh the page */
-  componentDidMount(){ /* kogda login logout budet my hotim znat */
-    const {setCurrentUser} = this.props
+  componentDidMount(){
+    const {checkUserSession}= this.props
+    checkUserSession()
+    /* kogda login logout budet my hotim znat */
     /* auth.signOut() bolganda onAuthStateChanged boladi */
-    this.unsubscribeFromAuth=auth.onAuthStateChanged(async userAuth=> { /* user degen object ishinde user.email bar emaio.displayName bar */
-      if(userAuth){ /*userAuth degen zaloginen kogda signed in,kogda zaloginen my hotim v db zapisat(esli on predydushi ne zapisan) i setState sdelat */
-        const userRef = await createUserProfileDocument(userAuth) /* userRef degen document {displayName,email} */
-        /* check if our db has updated at that ref with any new data. const snapshot =await userRef.get()*/
-        userRef.onSnapshot(snapshot=> { /*onSnapshot degen whenever we updated set a new value update or delete value we get that snapshot. userRef degen document {displayName,email}, snapshot degen object mozhno vitashit dannyie usera {displayName,email} i id */
-           /*snapshot.data() degen object  createdAt: t {seconds: 1603131853, nanoseconds: 348000000}
-displayName: "R-Line"
-email: "areshil91@gmail.com"
-__proto__: Object */
-        setCurrentUser({id: snapshot.id,...snapshot.data()}) /* kogda regimsya to state set bolady. setCurrentUser action arkyly redux store-da hranim currentUser:{createdAt,displayName,email,id}*/
-        })
+//     this.unsubscribeFromAuth=auth.onAuthStateChanged(async userAuth=> { /* user degen object ishinde user.email bar emaio.displayName bar */
+//       if(userAuth){ /*userAuth degen zaloginen kogda signed in,kogda zaloginen my hotim v db zapisat(esli on predydushi ne zapisan) i setState sdelat */
+//         const userRef = await createUserProfileDocument(userAuth) /* userRef degen document {displayName,email} */
+//         /* check if our db has updated at that ref with any new data. const snapshot =await userRef.get()*/
+//         userRef.onSnapshot(snapshot=> { /*onSnapshot degen whenever we updated set a new value update or delete value we get that snapshot. userRef degen document {displayName,email}, snapshot degen object mozhno vitashit dannyie usera {displayName,email} i id */
+//            /*snapshot.data() degen object  createdAt: t {seconds: 1603131853, nanoseconds: 348000000}
+// displayName: "R-Line"
+// email: "areshil91@gmail.com"
+// __proto__: Object */
+//         setCurrentUser({id: snapshot.id,...snapshot.data()}) /* kogda regimsya to state set bolady. setCurrentUser action arkyly redux store-da hranim currentUser:{createdAt,displayName,email,id}*/
+//         })
         
-      } /* userAuth is null,if user signes out we still want to set currentUser to null */
-      else{ /* esli user loggs out currentUser: null isteimyz */
-        setCurrentUser(userAuth) /* sign out basasdy onAuthStateChanged fires userAuth null bolady,v Header componente user.currentUser null bolady i button Sign In bolady */
-      }
-      /* v bd zasosivaem user [21321: {displayName,email,createdAt}] */
-       /* currentUser kerek shtoby button sign in ili sign out boldy, v header peredaem  */
+//       } /* userAuth is null,if user signes out we still want to set currentUser to null */
+//       else{ /* esli user loggs out currentUser: null isteimyz */
+//         setCurrentUser(userAuth) /* sign out basasdy onAuthStateChanged fires userAuth null bolady,v Header componente user.currentUser null bolady i button Sign In bolady */
+//       }
+//       /* v bd zasosivaem user [21321: {displayName,email,createdAt}] */
+//        /* currentUser kerek shtoby button sign in ili sign out boldy, v header peredaem  */
         
-      },error=> console.log(error))
+//       },error=> console.log(error))
 
   }
 
@@ -69,8 +70,5 @@ __proto__: Object */
 /* user degen {currentUser:{id,createdat,email,displName}} selectCurrentUser() automatom peredast state */
 const mapsStateToProps = createStructuredSelector({currentUser: selectCurrentUser})
 
-const mapDispatchToProps = dispatch => ({
-setCurrentUser : user => dispatch(setCurrentUser(user))
-})
 
-export default connect(mapsStateToProps,mapDispatchToProps)(App);
+export default connect(mapsStateToProps,{checkUserSession})(App);

@@ -3,6 +3,8 @@ import FormInput from '../form-input/form-input.component'
 import CustomButton from '../custom-button/custom-button.component'
 import {auth,createUserProfileDocument} from '../../firebase/firebase.utils'
 import './sign-up.component.scss'
+import {signUpStart} from '../../redux/user/user.action'
+import {connect} from 'react-redux'
 
 class SignUP extends React.Component {
   constructor(){
@@ -12,20 +14,15 @@ class SignUP extends React.Component {
 
   handleSubmit =async e =>{
     e.preventDefault()
+    const {signUpStart} = this.props
     const{displayName,email,password,confirmPassword}=this.state
     if(password !== confirmPassword){
       alert('Doesnt match') 
       return
     }
 
-    try{
-      const {user} = await auth.createUserWithEmailAndPassword(email,password)
-        /* user degen userAuth */
-       await createUserProfileDocument(user,{displayName}) /* sign in bolady */
-       this.setState({displayName: '',email: '',password: '',confirmPassword:''}) /* clear our form */
-    }catch(error){
-        console.log(error)
-    }
+    signUpStart({displayName,email,password})
+
   }
 
   handleChange = e =>{
@@ -59,7 +56,7 @@ class SignUP extends React.Component {
 }
 
 
-export default SignUP
+export default connect(null,{signUpStart})(SignUP)
 
 
 
