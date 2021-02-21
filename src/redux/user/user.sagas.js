@@ -39,7 +39,7 @@ export function* signInWithEmail({payload: {email,password}}){
 export function* isUserAuthenticated(){
   /* if user exist or not? */
   try{
-    const userAuth = yield getCurrentUser()
+    const userAuth = yield getCurrentUser() /* auth.onAuthStateChanged(userAuth=>{ */
     if(!userAuth) return /* the user has never signed it,there's no session,don't wanna do anything */
     yield getSnapshotFromUserAuth(userAuth)
   }catch(e){

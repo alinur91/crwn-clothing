@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 import {connect} from 'react-redux'
 import './App.css';
 import HomePage from './pages/homepage/homepage.component'
@@ -15,15 +15,14 @@ import {checkUserSession} from './redux/user/user.action'
 import {createStructuredSelector} from 'reselect'
 
 
-class App extends Component {
+const App =({checkUserSession,currentUser})=> {
 
 /* we wanna store the state of our user in our APP,when user loggs in we wanna store it in APP and pass it to Component */
-  unsubscribeFromAuth = null
+ const unsubscribeFromAuth = null
   /* auth=  firebase.auth() */ /* componentDidMount dlya 4ego shtoby uznat currentUser esli null to v Headere signIn bolady esli currentUser bar to sign out */
   /* componentDidMount runs everytime we refresh the page */
-  componentDidMount(){
-    const {checkUserSession}= this.props
-    checkUserSession()
+  useEffect(()=>checkUserSession(),[checkUserSession])
+    
     /* kogda login logout budet my hotim znat */
     /* auth.signOut() bolganda onAuthStateChanged boladi */
 //     this.unsubscribeFromAuth=auth.onAuthStateChanged(async userAuth=> { /* user degen object ishinde user.email bar emaio.displayName bar */
@@ -47,13 +46,10 @@ class App extends Component {
         
 //       },error=> console.log(error))
 
-  }
+  
 
-  componentWillUnmount(){
-    this.unsubscribeFromAut() /* close the subscription */
-  }
-
-  render(){
+ 
+ 
     return (
       <div> {/* kogda exact? kogda  naprimer posle /checkout nety /checkout/blbal. A Naprimer /shop  path='/shop' ne NUZHEN exact oitkeni /shop/jackets bolady*/}
         <Header />
@@ -61,12 +57,12 @@ class App extends Component {
           <Route exact path="/" component={HomePage} />
           <Route exact path="/checkout" component={CheckoutPage} />
           <Route path="/shop" component={ShopPage} /> {/* render degen what component to return, esli zaloginelsya nuzhno redirect '/' esli net to componenty SignInAndSignUpPage */}
-          <Route exact path="/signin" render={()=> this.props.currentUser?(<Redirect to="/"/>): (<SignInAndSignUpPage/>)} />
+          <Route exact path="/signin" render={()=> currentUser?(<Redirect to="/"/>): (<SignInAndSignUpPage/>)} />
         </Switch>
       </div>
     );
   } 
-}
+
 /* user degen {currentUser:{id,createdat,email,displName}} selectCurrentUser() automatom peredast state */
 const mapsStateToProps = createStructuredSelector({currentUser: selectCurrentUser})
 

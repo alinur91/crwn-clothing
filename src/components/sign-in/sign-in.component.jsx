@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component,useState } from 'react'
 import './sign-in.scss'
 import FormInput from '../form-input/form-input.component'
 import CustomButton from '../custom-button/custom-button.component'
@@ -8,40 +8,33 @@ import {googleSignInStart,emailSignInStart} from '../../redux/user/user.action'
 import {connect} from 'react-redux'
 
 
-class SignIn extends Component {
- state={
-  email:'',
-  password:'',
- }
+const SignIn =({emailSignInStart,googleSignInStart})=> {
+ const [userCredentials,setCredentials]= useState({email:'',password:''})
+  const {email,password} = userCredentials
 
- handleSubmit = async e =>{
+ const handleSubmit = async e =>{
   e.preventDefault()
-  const {emailSignInStart}=this.props
-  const {email,password} = this.state
   emailSignInStart(email,password)
  }
 
- handleChange = e =>{
+ const handleChange = e =>{
   const {name,value} = e.target
-  this.setState({ [name]: value });
+  setCredentials({...userCredentials, [name]: value });
  }
-
- render(){
-   const {googleSignInStart} = this.props
   return (
     <div className="sign-in">
       <h2 className="title">I already have an account</h2>
       <span>Sign in with your email and password</span>
 
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <FormInput
           label="email"
           name="email"
           id="email"
           required
           type="email"
-          value={this.state.email}
-          handleChange={this.handleChange}
+          value={email}
+          handleChange={handleChange}
         />
 
         <FormInput
@@ -50,8 +43,8 @@ class SignIn extends Component {
           id="password"
           required
           type="password"
-          value={this.state.password}
-          handleChange={this.handleChange}
+          value={password}
+          handleChange={handleChange}
         />
 
         <div className="buttons">
@@ -62,7 +55,8 @@ class SignIn extends Component {
       </form>
     </div>
   );
- }
+ 
+   
 }
 
 const mapDispatchToProps = dispatch =>({

@@ -3,8 +3,10 @@ import './collection.styles.scss'
 import {connect} from 'react-redux'
 import {selectCollection} from '../../redux/shop/shop.selectors'
 import CollectionItem from '../../components/collection-item/collection-item.component'
+import {firestore} from '../../firebase/firebase.utils'
 
 const CollectionPage = ({collection})=>{
+  
   /* collection degen {items,title,id,imageUrl,price} */
  const {title,items}= collection
  return (
